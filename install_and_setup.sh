@@ -118,10 +118,10 @@ for FILE_PAIR in "${CONFIG_FILES[@]}"; do
   IFS=':' read -r SRC DEST <<< "$FILE_PAIR"
   if [ -f "$SRC" ]; then
     echo "Copying $SRC a $DEST..."
-    cp "$SRC" "$DEST" || { echo "Error copying  $SRC a $DEST."; exit 1; }
+    cp "$SRC" "$DEST" || { echo "Error copying  $SRC a $DEST."; }
   else
     echo "The configuration file does not exist: $SRC"
-    exit 1
+    #exit 1
   fi
 done
 
