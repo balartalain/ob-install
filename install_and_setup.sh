@@ -89,7 +89,7 @@ else
   sudo mv eclipse /opt/
   cd /usr/local/bin
   sudo ln -s /opt/eclipse/eclipse eclipse
-  sudo sh -c 'echo "JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> /etc/environment'
+  sudo sh -c 'echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> /etc/environment'
   sudo sh -c 'echo "export ANT_OPTS=\"-Xmx1024M\"" >> /etc/environment'
 fi
 
