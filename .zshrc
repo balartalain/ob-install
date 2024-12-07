@@ -10,7 +10,7 @@ fi
 export ZSH=$HOME/.oh-my-zsh
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
-plugins=(git zsh-fzf-history-search zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete)
+plugins=(git fzf-zsh-plugin zsh-autosuggestions zsh-syntax-highlighting fast-syntax-highlighting zsh-autocomplete)
 source $ZSH/oh-my-zsh.sh
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
@@ -33,3 +33,11 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 #setopt HIST_REDUCE_BLANKS        # Remove superfluous blanks before recording entry.
 #setopt HIST_VERIFY               # Don't execute immediately upon history expansion.
 #setopt HIST_BEEP                 # Beep when accessing nonexistent history.
+
+# dt scripts
+export DT_SCRIPTS_FOLDER="/home/alain/Openbravo/dt/retail_scripts"
+export PATH="$PATH:/home/alain/Openbravo/dt/retail_scripts"
+export PATH="$PATH:/home/alain/Openbravo/dt/dev_tools"
+autoload bashcompinit
+bashcompinit
+source /home/alain/Openbravo/dt/retail_scripts/dt-completion
