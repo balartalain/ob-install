@@ -109,7 +109,8 @@ sudo -u postgres psql -c "alter user postgres with password 'postgres';"
 # CONFIGURATION FILES
 CONFIG_FILES=(
   "$SETUP_DIR/eclipse.desktop:$HOME/.local/share/applications/"
-  "$SETUP_DIR/smartgit.desktop:$HOME/.local/share/applications/"
+  "$SETUP_DIR/smartgit.desktop:$HOME/.local/share/applications/",
+  "$SETUP_DIR/.zshrc:$HOME"
 )
 
 # Copy configuration files
@@ -117,7 +118,7 @@ for FILE_PAIR in "${CONFIG_FILES[@]}"; do
   IFS=':' read -r SRC DEST <<< "$FILE_PAIR"
   if [ -f "$SRC" ]; then
     echo "Copying $SRC a $DEST..."
-    sudo cp "$SRC" "$DEST" || { echo "Error copying  $SRC a $DEST."; exit 1; }
+    cp "$SRC" "$DEST" || { echo "Error copying  $SRC a $DEST."; exit 1; }
   else
     echo "The configuration file does not exist: $SRC"
     exit 1
