@@ -12,10 +12,11 @@ install_package() {
   fi
 }
 
-PACKAGES=("zsh" "git" "curl" "nodejs" "npm" "postgresql-12" "postgresql-client-12"  "openjdk-11-jdk" "ant" "google-chrome-stable" "python3-tqdm")
+PACKAGES=("zsh" "git" "curl" "nodejs" "npm" "postgresql-12" "postgresql-client-12"  "openjdk-11-jdk" "ant" "google-chrome-stable" "python3-tqdm" "code")
 
 # Add Google Chrome repo
 if ! grep -q "^deb .*dl.google.com/linux/chrome/deb/" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+   echo "wwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmour -o /usr/share/keyrings/chrome-keyring.gpg 
    sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/chrome-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list' 
 #  echo "Añadiendo repositorio de Google Chrome..."
@@ -29,9 +30,11 @@ PACKAGE="curl"
 if ! dpkg -l | grep -qw "$PACKAGE"; then
  curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 fi
+
 # Postgres
 PACKAGE="postgresql"
 if ! dpkg -l | grep -qw "$PACKAGE"; then
+ echo "Adding postgresql repository." 
  curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
  #sudo sh -c 'curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null'
  echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
@@ -49,7 +52,7 @@ done
 # Add oh-my-zsh
 OHMYZSH_DIR="$HOME/.oh-my-zsh"
 if [ -d "$OHMYZSH_DIR" ]; then
-  echo "skip oh-my-zsh install"
+  echo "oh-my-zsh is already installed"
 else
   git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
@@ -63,7 +66,9 @@ fi
 
 # Apache
 EXISTE=$(ls /opt | grep -i apache)
-if ![ -z "$EXISTE" ]; then
+if ! [ -z "$EXISTE" ]; then
+ echo "apache is already installed"
+else
  cd "$SETUP_DIR" || exit
  tar xf apache-tomcat-9.0.*.tar.gz
  sudo mv apache-tomcat-9.0.97 /opt/
@@ -76,7 +81,9 @@ fi
 
 # Eclipse
 EXISTE=$(ls /opt | grep -i eclipse)
-if ![ -z "$EXISTE" ]; then
+if ! [ -z "$EXISTE" ]; then
+ echo "eclipse is already installed"
+else
   cd "$SETUP_DIR" || exit
   tar xf eclipse-jee-*.tar.gz
   sudo mv eclipse /opt/
@@ -88,7 +95,9 @@ fi
 
 # Smartgit
 EXISTE=$(ls /opt | grep -i smartgit)
-if ![ -z "$EXISTE" ]; then
+if ! [ -z "$EXISTE" ]; then
+  echo "smartgit is already installed"
+else
   cd "$SETUP_DIR" || exit
   tar xf smartgit-linux-19_1_8.tar.gz
   sudo mv smartgit /opt/
