@@ -7,6 +7,7 @@ install_package() {
   if dpkg -l | grep -qw "$PACKAGE"; then
     echo "--$PACKAGE is already installed."
   else
+    echo ""
     echo "################ Installing $PACKAGE...##################"
     sudo apt-get install -y "$PACKAGE" || { echo "Error installing $PACKAGE."; exit 1; }
   fi
@@ -16,7 +17,6 @@ PACKAGES=("zsh" "git" "curl" "nodejs" "npm" "postgresql-12" "postgresql-client-1
 
 # Add Google Chrome repo
 if ! grep -q "^deb .*dl.google.com/linux/chrome/deb/" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
-   echo "wwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo gpg --dearmour -o /usr/share/keyrings/chrome-keyring.gpg 
    sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/keyrings/chrome-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google.list' 
 #  echo "Añadiendo repositorio de Google Chrome..."

@@ -35,6 +35,7 @@ setopt HIST_SAVE_NO_DUPS         # Don't write duplicate entries in the history 
 #setopt HIST_BEEP                 # Beep when accessing nonexistent history.
 
 # dt scripts
+export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 export DT_SCRIPTS_FOLDER="/home/alain/Openbravo/dt/retail_scripts"
 export PATH="$PATH:/home/alain/Openbravo/dt/retail_scripts"
 export PATH="$PATH:/home/alain/Openbravo/dt/dev_tools"
