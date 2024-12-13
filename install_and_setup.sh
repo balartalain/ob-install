@@ -69,11 +69,8 @@ EXISTE=$(ls /opt | grep -i apache)
 if ! [ -z "$EXISTE" ]; then
  echo "apache is already installed"
 else
- cd "$SETUP_DIR" || exit
- tar xf apache-tomcat-9.0.*.tar.gz
- sudo mv apache-tomcat-9.0.97 /opt/
- cd /opt
- sudo ln -s apache-tomcat-9.0.* apache-tomcat-9.0
+ tar -xzf apache-tomcat-9.0.*.tar.gz -C /opt
+ sudo ln -s apache-tomcat-9.0.* /usr/local/bin/apache-tomcat-9.0
  sudo sh -c 'echo "export CATALINA_OPTS=\"-server -Djava.awt.headless=true -Xms512M -Xmx1024M\"" >> /etc/environment'
  sudo sh -c 'echo "export CATALINA_HOME=/opt/apache-tomcat-9.0" >> /etc/environment'
  sudo sh -c 'echo "export CATALINA_BASE=/opt/apache-tomcat-9.0" >> /etc/environment'
@@ -84,11 +81,8 @@ EXISTE=$(ls /opt | grep -i eclipse)
 if ! [ -z "$EXISTE" ]; then
  echo "eclipse is already installed"
 else
-  cd "$SETUP_DIR" || exit
-  tar xf eclipse-jee-*.tar.gz
-  sudo mv eclipse /opt/
-  cd /usr/local/bin
-  sudo ln -s /opt/eclipse/eclipse eclipse
+  sudo tar -xzf eclipse-jee-*.tar.gz -C /opt
+  sudo ln -s /opt/eclipse/eclipse eclipse /usr/local/bin/eclipse
   sudo sh -c 'echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> /etc/environment'
   sudo sh -c 'echo "export ANT_OPTS=\"-Xmx1024M\"" >> /etc/environment'
 fi
@@ -98,9 +92,8 @@ EXISTE=$(ls /opt | grep -i smartgit)
 if ! [ -z "$EXISTE" ]; then
   echo "smartgit is already installed"
 else
-  cd "$SETUP_DIR" || exit
-  tar xf smartgit-linux-19_1_8.tar.gz
-  sudo mv smartgit /opt/
+  sudo tar -xzf smartgit-linux-19_1_8.tar.gz -C /opt 
+  sudo ln -s /opt/smartgit/bin/smartgit.sh /usr/local/bin/smartgit 
 fi
 
 # Postgres config
