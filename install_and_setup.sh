@@ -13,7 +13,7 @@ install_package() {
   fi
 }
 
-PACKAGES=("zsh" "git" "curl" "nodejs" "npm" "postgresql-12" "postgresql-client-12"  "openjdk-11-jdk" "ant" "google-chrome-stable" "python3-tqdm" "code")
+PACKAGES=("zsh" "git" "curl" "nodejs" "npm" "postgresql-12" "postgresql-client-12"  "openjdk-11-jdk" "ant" "google-chrome-stable" "python3-tqdm")
 
 # Add Google Chrome repo
 if ! grep -q "^deb .*dl.google.com/linux/chrome/deb/" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
@@ -32,6 +32,13 @@ if ! dpkg -l | grep -qw "$PACKAGE"; then
 fi
 
 # Postgres
+
+#Para Ubuntu 24.04
+#sudo apt install -y postgresql-common
+#sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh
+#sudo apt update
+#sudo apt install -y postgresql-12
+
 PACKAGE="postgresql"
 if ! dpkg -l | grep -qw "$PACKAGE"; then
  echo "Adding postgresql repository." 
@@ -56,6 +63,9 @@ if [ -d "$OHMYZSH_DIR" ]; then
 else
   git clone https://github.com/robbyrussell/oh-my-zsh.git ~/.oh-my-zsh
   git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
+  git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+  git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+  git clone --depth 1 https://github.com/unixorn/fzf-zsh-plugin.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-zsh-plugin
   if [ $? -eq 0 ]; then 
     echo "Repositorio clonado correctamente en $CLONE_DIR." 
   else 
@@ -69,8 +79,8 @@ EXISTE=$(ls /opt | grep -i apache)
 if ! [ -z "$EXISTE" ]; then
  echo "apache is already installed"
 else
- tar -xzf apache-tomcat-9.0.*.tar.gz -C /opt
- sudo ln -s apache-tomcat-9.0.* /usr/local/bin/apache-tomcat-9.0
+ sudo tar -xzf $SETUP_DIR/apache-tomcat-9.0.*.tar.gz -C /opt
+ sudo ln -s /opt/apache-tomcat-9.0.* /usr/local/bin/apache-tomcat-9.0
  sudo sh -c 'echo "export CATALINA_OPTS=\"-server -Djava.awt.headless=true -Xms512M -Xmx1024M\"" >> /etc/environment'
  sudo sh -c 'echo "export CATALINA_HOME=/opt/apache-tomcat-9.0" >> /etc/environment'
  sudo sh -c 'echo "export CATALINA_BASE=/opt/apache-tomcat-9.0" >> /etc/environment'
@@ -81,8 +91,8 @@ EXISTE=$(ls /opt | grep -i eclipse)
 if ! [ -z "$EXISTE" ]; then
  echo "eclipse is already installed"
 else
-  sudo tar -xzf eclipse-jee-*.tar.gz -C /opt
-  sudo ln -s /opt/eclipse/eclipse eclipse /usr/local/bin/eclipse
+  sudo tar -xzf $SETUP_DIR/eclipse-jee-*.tar.gz -C /opt
+  sudo ln -s /opt/eclipse/eclipse /usr/local/bin/eclipse
   sudo sh -c 'echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> /etc/environment'
   sudo sh -c 'echo "export ANT_OPTS=\"-Xmx1024M\"" >> /etc/environment'
 fi
@@ -92,7 +102,7 @@ EXISTE=$(ls /opt | grep -i smartgit)
 if ! [ -z "$EXISTE" ]; then
   echo "smartgit is already installed"
 else
-  sudo tar -xzf smartgit-linux-19_1_8.tar.gz -C /opt 
+  sudo tar -xzf $SETUP_DIR/smartgit-linux-19_1_8.tar.gz -C /opt 
   sudo ln -s /opt/smartgit/bin/smartgit.sh /usr/local/bin/smartgit 
 fi
 
@@ -101,7 +111,7 @@ sudo -u postgres psql -c "alter user postgres with password 'postgres';"
 
 # CONFIGURATION FILES
 CONFIG_FILES=(
-  "$SETUP_DIR/eclipse.desktop:$HOME/.local/share/applications/"
+  "$SETUP_DIR/eclipse.desktop:$HOME/.local/share/applications/",
   "$SETUP_DIR/smartgit.desktop:$HOME/.local/share/applications/",
   "$SETUP_DIR/.zshrc:$HOME"
 )
@@ -117,5 +127,4 @@ for FILE_PAIR in "${CONFIG_FILES[@]}"; do
     #exit 1
   fi
 done
-
 echo "DONE."
