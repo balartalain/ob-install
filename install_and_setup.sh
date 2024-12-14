@@ -74,13 +74,26 @@ else
   fi
 fi
 
+TOMCAT_TAR="apache-tomcat-9.0.*.tar.gz"
+ECLIPSE_TAR="eclipse-jee-*.tar.gz"
+SMARTGIT_TAR="smartgit-linux-19_1_8.tar.gz"
+TOMCAT_DROPBOX="https://www.dropbox.com/scl/fi/ptske6cmcoonvpkasmvie/apache-tomcat-9.0.97.tar.gz?rlkey=imic9ki8u30f86x2xbfh4bo6i&st=bh8e391q&dl=1 -O apache-tomcat-9.0.97.tar.gz"
+SMARTGIT_DROPBOX="https://www.dropbox.com/scl/fi/2uzlw5trq81g2dzeki4cr/smartgit-linux-19_1_8.tar.gz?rlkey=xthpju501ta2oy6ow1o644fo4&st=uku7pm4h&dl=1 -O smartgit-linux-19_1_8.tar.gz"
+
 # Apache
 EXISTE=$(ls /opt | grep -i apache)
 if ! [ -z "$EXISTE" ]; then
  echo "apache is already installed"
 else
- sudo tar -xzf $SETUP_DIR/apache-tomcat-9.0.*.tar.gz -C /opt
- sudo ln -s /opt/apache-tomcat-9.0.* /usr/local/bin/apache-tomcat-9.0
+  EXIST_TAR=$(ls $SETUPDIR | grep -i $TOMCAT_TAR)
+  if ! [ -z "$EXIST_TAR" ]; then
+    sudo tar -xzf $SETUP_DIR/$TOMCAT_TAR -C /opt
+  else
+    wget -P /tmp $TOMCAT_DROPBOX
+    sudo tar -xzf /tmp/$TOMCAT_TAR -C /opt
+    rm -f /tmp/$TOMCAT_TAR
+  fi
+ sudo ln -s /opt/apache-tomcat-9.0.* /opt/apache-tomcat-9.0
  sudo sh -c 'echo "export CATALINA_OPTS=\"-server -Djava.awt.headless=true -Xms512M -Xmx1024M\"" >> /etc/environment'
  sudo sh -c 'echo "export CATALINA_HOME=/opt/apache-tomcat-9.0" >> /etc/environment'
  sudo sh -c 'echo "export CATALINA_BASE=/opt/apache-tomcat-9.0" >> /etc/environment'
@@ -91,7 +104,15 @@ EXISTE=$(ls /opt | grep -i eclipse)
 if ! [ -z "$EXISTE" ]; then
  echo "eclipse is already installed"
 else
-  sudo tar -xzf $SETUP_DIR/eclipse-jee-*.tar.gz -C /opt
+   EXIST_TAR=$(ls $SETUPDIR | grep -i $ECLIPSE_TAR)
+  if ! [ -z "$EXIST_TAR" ]; then
+    sudo tar -xzf $SETUP_DIR/$ECLIPSE_TAR -C /opt
+  else
+    wget -P /tmp $ECLIPSE_DROPBOX
+    sudo tar -xzf /tmp/$ECLIPSE_TAR -C /opt
+    rm -f /tmp/$ECLIPSE_TAR
+  fi
+
   sudo ln -s /opt/eclipse/eclipse /usr/local/bin/eclipse
   sudo sh -c 'echo "export JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64" >> /etc/environment'
   sudo sh -c 'echo "export ANT_OPTS=\"-Xmx1024M\"" >> /etc/environment'
@@ -102,7 +123,15 @@ EXISTE=$(ls /opt | grep -i smartgit)
 if ! [ -z "$EXISTE" ]; then
   echo "smartgit is already installed"
 else
-  sudo tar -xzf $SETUP_DIR/smartgit-linux-19_1_8.tar.gz -C /opt 
+   EXIST_TAR=$(ls $SETUPDIR | grep -i $SMARGIT_TAR)
+  if ! [ -z "$EXIST_TAR" ]; then
+    sudo tar -xzf $SETUP_DIR/$SMARTGIT_TAR -C /opt
+  else
+    wget -P /tmp $ECLIPSE_DROPBOX
+    sudo tar -xzf /tmp/$SMARTGIT_TAR -C /opt
+    rm -f /tmp/$SMARTGIT_TAR 
+  fi
+
   sudo ln -s /opt/smartgit/bin/smartgit.sh /usr/local/bin/smartgit 
 fi
 
@@ -111,8 +140,8 @@ sudo -u postgres psql -c "alter user postgres with password 'postgres';"
 
 # CONFIGURATION FILES
 CONFIG_FILES=(
-  "$SETUP_DIR/eclipse.desktop:$HOME/.local/share/applications/",
-  "$SETUP_DIR/smartgit.desktop:$HOME/.local/share/applications/",
+  "$SETUP_DIR/eclipse.desktop:$HOME/.local/share/applications/"
+  "$SETUP_DIR/smartgit.desktop:$HOME/.local/share/applications/"
   "$SETUP_DIR/.zshrc:$HOME"
 )
 
