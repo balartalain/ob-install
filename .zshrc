@@ -42,3 +42,10 @@ export PATH="$PATH:/home/alain/Openbravo/dt/dev_tools"
 autoload bashcompinit
 bashcompinit
 source /home/alain/Openbravo/dt/retail_scripts/dt-completion
+alias c2start="(cd modules/org.openbravo.core2/web-jspack/org.openbravo.core2 && npm start)"
+alias c2story="(cd modules/org.openbravo.core2/web-jspack/org.openbravo.core2 && npm run storybook)"
+alias c2build="(cd modules/org.openbravo.core2/ && ant build)"
+alias c2gen="(cd modules/org.openbravo.core2/ && ant generate.app)"
+alias c2bs="c2build && c2start"
+alias c2cy="(cd modules/org.openbravo.core2/web-jspack/org.openbravo.core2/src-test && ../node_modules/.bin/cypress open)"
+alias c2messages="(cd modules/org.openbravo.core2/ && ant generate.module.info)"
