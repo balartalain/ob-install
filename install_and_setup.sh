@@ -134,6 +134,9 @@ else
 
   sudo ln -s /opt/smartgit/bin/smartgit.sh /usr/local/bin/smartgit 
 fi
+sudo chown -R $USER:$USER /opt/apache-tomcat-9.0.*
+sudo chown -R $USER:$USER /opt/eclipse
+sudo chown -R $USER:$USER /opt/smartgit
 
 # Postgres config
 sudo -u postgres psql -c "alter user postgres with password 'postgres';"
