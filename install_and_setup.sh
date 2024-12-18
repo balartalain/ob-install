@@ -78,6 +78,7 @@ TOMCAT_TAR="apache-tomcat-9.0.*.tar.gz"
 ECLIPSE_TAR="eclipse-jee-*.tar.gz"
 SMARTGIT_TAR="smartgit-linux-19_1_8.tar.gz"
 TOMCAT_DROPBOX="https://www.dropbox.com/scl/fi/ptske6cmcoonvpkasmvie/apache-tomcat-9.0.97.tar.gz?rlkey=imic9ki8u30f86x2xbfh4bo6i&st=bh8e391q&dl=1 -O apache-tomcat-9.0.97.tar.gz"
+ECLIPSE_DROPBOX="https://www.dropbox.com/scl/fi/s3w2yifmtpuqny3vjmev9/eclipse-jee-2024-12-R-linux-gtk-x86_64.tar.gz?rlkey=71updtr1qrpshfoqliv8nm3o5&st=574pcj1s&dl=0"
 SMARTGIT_DROPBOX="https://www.dropbox.com/scl/fi/2uzlw5trq81g2dzeki4cr/smartgit-linux-19_1_8.tar.gz?rlkey=xthpju501ta2oy6ow1o644fo4&st=uku7pm4h&dl=1 -O smartgit-linux-19_1_8.tar.gz"
 
 # Apache
@@ -127,7 +128,7 @@ else
   if ! [ -z "$EXIST_TAR" ]; then
     sudo tar -xzf $SETUP_DIR/$SMARTGIT_TAR -C /opt
   else
-    wget -P /tmp $ECLIPSE_DROPBOX
+    wget -P /tmp $SMARTGIT_DROPBOX
     sudo tar -xzf /tmp/$SMARTGIT_TAR -C /opt
     rm -f /tmp/$SMARTGIT_TAR 
   fi
