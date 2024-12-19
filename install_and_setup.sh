@@ -15,7 +15,6 @@ install_package() {
 
 PACKAGES=("zsh" "curl" "nodejs" "openjdk-11-jdk" "ant" "google-chrome-stable" "python3-tqdm" "postgresql-12")
 
-sudo apt update
 
 # Add Google Chrome repo
 if ! grep -q "^deb .*dl.google.com/linux/chrome/deb/" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
@@ -25,17 +24,6 @@ if ! grep -q "^deb .*dl.google.com/linux/chrome/deb/" /etc/apt/sources.list /etc
 #  wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo tee /usr/share/keyrings/google-chrome-archive-keyring.gpg > /dev/null
 #  echo "deb [signed-by=/usr/share/keyrings/google-chrome-archive-keyring.gpg] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
 #  sudo apt-get update
-fi
-
-# Node y Npm
-PACKAGE="curl"
-if ! dpkg -l | grep -qw "$PACKAGE"; then
-  sudo apt install curl
-# curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
-fi
-
-if ! dpkg -l | grep -qw "nodejs"; then
- curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 fi
 
 #NODE_MAJOR=20
@@ -57,7 +45,19 @@ if ! dpkg -l | grep -qw "$PACKAGE"; then
  #echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
  sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 fi
+
 sudo apt update
+# Node y Npm
+PACKAGE="curl"
+if ! dpkg -l | grep -qw "$PACKAGE"; then
+  sudo apt install curl
+# curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+fi
+
+if ! dpkg -l | grep -qw "nodejs"; then
+ curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+fi
+
 # Install packages
 sudo apt-get install -y git
 for PACKAGE in "${PACKAGES[@]}"; do
