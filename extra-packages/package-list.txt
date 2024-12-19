@@ -1,5 +1,0 @@
-whatsapp
-simplenote
-protonvpn
-forticlient
-terminator

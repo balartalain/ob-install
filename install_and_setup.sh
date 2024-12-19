@@ -13,7 +13,9 @@ install_package() {
   fi
 }
 
-PACKAGES=("zsh" "git" "curl" "nodejs" "npm" "postgresql-12" "postgresql-client-12"  "openjdk-11-jdk" "ant" "google-chrome-stable" "python3-tqdm")
+PACKAGES=("zsh" "curl" "nodejs" "openjdk-11-jdk" "ant" "google-chrome-stable" "python3-tqdm" "postgresql-12")
+
+sudo apt update
 
 # Add Google Chrome repo
 if ! grep -q "^deb .*dl.google.com/linux/chrome/deb/" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
@@ -28,8 +30,16 @@ fi
 # Node y Npm
 PACKAGE="curl"
 if ! dpkg -l | grep -qw "$PACKAGE"; then
+  sudo apt install curl
+# curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+fi
+
+if ! dpkg -l | grep -qw "nodejs"; then
  curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 fi
+
+#NODE_MAJOR=20
+#echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 
 # Postgres
 
@@ -42,16 +52,14 @@ fi
 PACKAGE="postgresql"
 if ! dpkg -l | grep -qw "$PACKAGE"; then
  echo "Adding postgresql repository." 
- curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
- #sudo sh -c 'curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null'
- echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
- #sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+ #curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc|sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/postgresql.gpg
+ sudo sh -c 'curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/apt.postgresql.org.gpg >/dev/null'
+ #echo "deb http://apt.postgresql.org/pub/repos/apt/ `lsb_release -cs`-pgdg main" |sudo tee  /etc/apt/sources.list.d/pgdg.list
+ sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 fi
-
-# Update package
 sudo apt update
-
 # Install packages
+sudo apt-get install -y git
 for PACKAGE in "${PACKAGES[@]}"; do
   install_package "$PACKAGE"
 done
@@ -78,7 +86,7 @@ TOMCAT_TAR="apache-tomcat-9.0.*.tar.gz"
 ECLIPSE_TAR="eclipse-jee-*.tar.gz"
 SMARTGIT_TAR="smartgit-linux-19_1_8.tar.gz"
 TOMCAT_DROPBOX="https://www.dropbox.com/scl/fi/ptske6cmcoonvpkasmvie/apache-tomcat-9.0.97.tar.gz?rlkey=imic9ki8u30f86x2xbfh4bo6i&st=bh8e391q&dl=1 -O apache-tomcat-9.0.97.tar.gz"
-ECLIPSE_DROPBOX="https://www.dropbox.com/scl/fi/s3w2yifmtpuqny3vjmev9/eclipse-jee-2024-12-R-linux-gtk-x86_64.tar.gz?rlkey=71updtr1qrpshfoqliv8nm3o5&st=574pcj1s&dl=0"
+ECLIPSE_DROPBOX="https://www.dropbox.com/scl/fi/s3w2yifmtpuqny3vjmev9/eclipse-jee-2024-12-R-linux-gtk-x86_64.tar.gz?rlkey=71updtr1qrpshfoqliv8nm3o5&st=574pcj1s&dl=1 -O eclipse-jee.tar.gz"
 SMARTGIT_DROPBOX="https://www.dropbox.com/scl/fi/2uzlw5trq81g2dzeki4cr/smartgit-linux-19_1_8.tar.gz?rlkey=xthpju501ta2oy6ow1o644fo4&st=uku7pm4h&dl=1 -O smartgit-linux-19_1_8.tar.gz"
 
 # Apache
@@ -90,8 +98,9 @@ else
   if ! [ -z "$EXIST_TAR" ]; then
     sudo tar -xzf $SETUP_DIR/$TOMCAT_TAR -C /opt
   else
-    wget -P /tmp $TOMCAT_DROPBOX
-    sudo tar -xzf /tmp/$TOMCAT_TAR -C /opt
+    cd /tmp
+    wget $TOMCAT_DROPBOX
+    sudo tar -xzf $TOMCAT_TAR -C /opt
     rm -f /tmp/$TOMCAT_TAR
   fi
  sudo ln -s /opt/apache-tomcat-9.0.* /opt/apache-tomcat-9.0
@@ -109,8 +118,9 @@ else
   if ! [ -z "$EXIST_TAR" ]; then
     sudo tar -xzf $SETUP_DIR/$ECLIPSE_TAR -C /opt
   else
-    wget -P /tmp $ECLIPSE_DROPBOX
-    sudo tar -xzf /tmp/$ECLIPSE_TAR -C /opt
+    cd /tmp
+    wget $ECLIPSE_DROPBOX
+    sudo tar -xzf $ECLIPSE_TAR -C /opt
     rm -f /tmp/$ECLIPSE_TAR
   fi
 
@@ -128,8 +138,9 @@ else
   if ! [ -z "$EXIST_TAR" ]; then
     sudo tar -xzf $SETUP_DIR/$SMARTGIT_TAR -C /opt
   else
-    wget -P /tmp $SMARTGIT_DROPBOX
-    sudo tar -xzf /tmp/$SMARTGIT_TAR -C /opt
+    cd /tmp
+    wget $SMARTGIT_DROPBOX
+    sudo tar -xzf $SMARTGIT_TAR -C /opt
     rm -f /tmp/$SMARTGIT_TAR 
   fi
 
@@ -147,6 +158,7 @@ CONFIG_FILES=(
   "$SETUP_DIR/eclipse.desktop:$HOME/.local/share/applications/"
   "$SETUP_DIR/smartgit.desktop:$HOME/.local/share/applications/"
   "$SETUP_DIR/.zshrc:$HOME"
+  "$SETUP_DIR/.zsh_history:$HOME"
 )
 
 # Copy configuration files
