@@ -26,9 +26,6 @@ if ! grep -q "^deb .*dl.google.com/linux/chrome/deb/" /etc/apt/sources.list /etc
 #  sudo apt-get update
 fi
 
-#NODE_MAJOR=20
-#echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_$NODE_MAJOR.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
-
 # Postgres
 
 #Para Ubuntu 24.04
@@ -46,17 +43,18 @@ if ! dpkg -l | grep -qw "$PACKAGE"; then
  sudo sh -c 'echo "deb [arch=amd64 signed-by=/usr/share/postgresql-common/pgdg/apt.postgresql.org.asc] https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
 fi
 
-sudo apt update
-# Node y Npm
 PACKAGE="curl"
 if ! dpkg -l | grep -qw "$PACKAGE"; then
+  sudo apt update
   sudo apt install curl
 # curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
 fi
 
 if ! dpkg -l | grep -qw "nodejs"; then
- curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+  curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | sudo gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg
+  echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | sudo tee /etc/apt/sources.list.d/nodesource.list
 fi
+sudo apt update
 
 # Install packages
 sudo apt-get install -y git
